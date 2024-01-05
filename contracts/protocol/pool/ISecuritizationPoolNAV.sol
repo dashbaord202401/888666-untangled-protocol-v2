@@ -2,6 +2,8 @@
 pragma solidity 0.8.19;
 
 import {Configuration} from '../../libraries/Configuration.sol';
+import {LoanEntry} from './base/types.sol';
+import "../../libraries/UnpackLoanParamtersLib.sol";
 
 interface ISecuritizationPoolNAV {
     /// Events
@@ -11,16 +13,14 @@ interface ISecuritizationPoolNAV {
     event ChangeRate(uint256 indexed loan, uint256 newRate);
     event File(bytes32 indexed what, uint256 rate, uint256 value);
 
-
     // events
-    event Depend(bytes32 indexed name, address addr);
-    event SetLoanMaturity(bytes32 nftID_, uint256 maturityDate_);
+    event SetLoanMaturity(uint256 indexed loan, uint256 maturityDate_);
     event WriteOff(uint256 indexed loan, uint256 indexed writeOffGroupsIndex, bool override_);
     event AddLoan(uint256 indexed loan, uint256 principalAmount, uint256 maturityDate);
+    event Repay(uint256 indexed loan, uint256 currencyAmount);
+    event UpdateAssetRiskScore(uint256 loan, uint256 risk);
 
-    event UpdateAssetRiskScore(uint256 loanId, uint256 risk);
-
-    function addLoan(uint256 loan) external returns (uint256);
+    function addLoan(uint256 loan, LoanEntry calldata loanEntry) external returns (uint256);
 
     function repayLoan(uint256 loan, uint256 amount) external returns (uint256);
 
@@ -53,4 +53,10 @@ interface ISecuritizationPoolNAV {
 
     function updateAssetRiskScore(bytes32 nftID_, uint256 risk_) external;
 
+    /// @notice retrieves loan information
+    function getEntry(bytes32 agreementId) external view returns (LoanEntry memory);
+
+    function unpackParamsForAgreementID(
+        bytes32 agreementId
+    ) external view returns (UnpackLoanParamtersLib.InterestParams memory params);
 }
