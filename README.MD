@@ -4,6 +4,10 @@ Untangled is a decentralized lending and liquidity protocol for real world asset
 
 Untangled protocol code has been inspired by Centrifuge, Goldfinch and MakerDao, among others. Untangled protocol contracts are under AGPL license.
 
+## Architecture
+
+![General Architecture](images/System-design-protocol.png)
+
 ## Installing
 
 #### Packages
